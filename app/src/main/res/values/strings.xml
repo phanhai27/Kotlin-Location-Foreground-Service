@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Kotlin Location Foreground Service</string>
+
+    <string name="status_title">Service Status:</string>
+    <string name="status_running">RUNNING</string>
+    <string name="status_not_running">NOT RUNNING</string>
+    <string name="button_start">Start Service</string>
+    <string name="button_stop">Stop Service</string>
 </resources>

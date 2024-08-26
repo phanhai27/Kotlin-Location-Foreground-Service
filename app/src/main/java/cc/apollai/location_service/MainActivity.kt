@@ -13,12 +13,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import cc.apollai.location_service.ui.ForegroundServiceScreen
 import cc.apollai.location_service.ui.theme.KotlinLocationForegroundServiceTheme
 
 class MainActivity : ComponentActivity() {
     private var locationService: LocationForegroundService? = null
+
+    private var serviceState by mutableStateOf(false)
+    private var displayableLocation by mutableStateOf<String?>(null)
 
     companion object {
         private const val TAG = "MainActivity"
@@ -30,11 +37,13 @@ class MainActivity : ComponentActivity() {
 
             val binder = service as LocationForegroundService.LocalBinder
             locationService = binder.getService()
+            serviceState = true
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
             Log.d(TAG, "onServiceDisconnected")
 
+            serviceState = false
             locationService = null
         }
     }
@@ -43,14 +52,10 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            KotlinLocationForegroundServiceTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }
+            ForegroundServiceScreen(
+                serviceRunning = serviceState,
+                currentLocation = displayableLocation,
+                onClick = { /*TODO*/ })
         }
     }
 }
