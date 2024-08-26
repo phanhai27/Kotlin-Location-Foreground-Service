@@ -1,6 +1,10 @@
 package cc.apollai.location_service
 
+import android.content.ComponentName
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -14,6 +18,27 @@ import androidx.compose.ui.tooling.preview.Preview
 import cc.apollai.location_service.ui.theme.KotlinLocationForegroundServiceTheme
 
 class MainActivity : ComponentActivity() {
+    private var locationService: LocationForegroundService? = null
+
+    companion object {
+        private const val TAG = "MainActivity"
+    }
+
+    private val connection = object: ServiceConnection {
+        override fun onServiceConnected(className: ComponentName, service: IBinder) {
+            Log.d(TAG, "onServiceConnected")
+
+            val binder = service as LocationForegroundService.LocalBinder
+            locationService = binder.getService()
+        }
+
+        override fun onServiceDisconnected(arg0: ComponentName) {
+            Log.d(TAG, "onServiceDisconnected")
+
+            locationService = null
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()

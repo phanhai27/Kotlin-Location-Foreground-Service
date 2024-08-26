@@ -14,7 +14,7 @@ class LocationForegroundService: Service() {
         private const val TAG = "LocationForegroundService"
     }
 
-    inner class LocalBinder : Binder() {
+    inner class LocalBinder: Binder() {
         fun getService(): LocationForegroundService = this@LocationForegroundService
     }
 
