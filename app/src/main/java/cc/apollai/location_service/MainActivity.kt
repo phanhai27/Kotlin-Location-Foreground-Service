@@ -20,8 +20,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import cc.apollai.location_service.ui.ForegroundServiceScreen
 import cc.apollai.location_service.ui.theme.KotlinLocationForegroundServiceTheme
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private var locationService: LocationForegroundService? = null
@@ -40,6 +42,8 @@ class MainActivity : ComponentActivity() {
             val binder = service as LocationForegroundService.LocalBinder
             locationService = binder.getService()
             serviceState = true
+
+            startDataFlow()
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
@@ -47,6 +51,12 @@ class MainActivity : ComponentActivity() {
 
             serviceState = false
             locationService = null
+        }
+    }
+
+    private fun startDataFlow() {
+        lifecycleScope.launch {
+            Log.d(TAG, "This is the flow of location.")
         }
     }
 
@@ -64,6 +74,11 @@ class MainActivity : ComponentActivity() {
         tryToBindToService()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unbindService(connection)
+    }
+
     private val notificationPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
     ) {}
@@ -74,11 +89,9 @@ class MainActivity : ComponentActivity() {
 
         when {
             permissions.getOrDefault(android.Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
-
             }
 
             permissions.getOrDefault(android.Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
-
             }
 
             else -> {

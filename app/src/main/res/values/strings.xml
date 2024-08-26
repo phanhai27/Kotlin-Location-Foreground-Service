@@ -6,4 +6,8 @@
     <string name="status_not_running">NOT RUNNING</string>
     <string name="button_start">Start Service</string>
     <string name="button_stop">Stop Service</string>
+
+    <string name="notification_channel_name">General notification</string>
+    <string name="notification_title">Foreground Service</string>
+    <string name="notification_description">Sample app is running in the background.</string>
 </resources>
