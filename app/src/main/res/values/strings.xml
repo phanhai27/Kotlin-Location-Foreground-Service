@@ -10,4 +10,7 @@
     <string name="notification_channel_name">General notification</string>
     <string name="notification_title">Foreground Service</string>
     <string name="notification_description">Location Updates is running in the background.</string>
+
+    <string name="location_title">Last Location: </string>
+    <string name="location_fetching">…fetching…</string>
 </resources>

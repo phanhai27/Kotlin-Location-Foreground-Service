@@ -92,5 +92,16 @@ private fun ForegroundServiceScreenContent(
             )
         }
 
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Text(
+            text = stringResource(id = R.string.location_title),
+            style = MaterialTheme.typography.titleMedium
+        )
+
+        Text(
+            text = currentLocation
+                ?: stringResource(id = R.string.location_fetching)
+        )
     }
 }
