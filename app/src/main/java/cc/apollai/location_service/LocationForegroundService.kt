@@ -84,6 +84,10 @@ class LocationForegroundService: Service() {
         )
     }
 
+    fun stopForegroundService() {
+        stopSelf()
+    }
+
     private fun setupLocationUpdates() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationCallback = object : LocationCallback() {

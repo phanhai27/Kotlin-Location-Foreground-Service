@@ -101,9 +101,11 @@ class MainActivity : ComponentActivity() {
 
         when {
             permissions.getOrDefault(android.Manifest.permission.ACCESS_FINE_LOCATION, false) -> {
+                startForegroundService()
             }
 
             permissions.getOrDefault(android.Manifest.permission.ACCESS_COARSE_LOCATION, false) -> {
+                startForegroundService()
             }
 
             else -> {
@@ -143,7 +145,16 @@ class MainActivity : ComponentActivity() {
             )
         } else {
             Log.d(TAG, "stop foreground service")
+            locationService?.stopForegroundService()
         }
+    }
+
+    private fun startForegroundService() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            startForegroundService(Intent(this, LocationForegroundService::class.java))
+        }
+
+        tryToBindToService()
     }
 }
 
