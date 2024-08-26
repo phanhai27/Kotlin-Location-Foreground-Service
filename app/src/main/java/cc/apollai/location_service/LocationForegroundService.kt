@@ -18,6 +18,7 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlin.time.Duration.Companion.seconds
 
 class LocationForegroundService: Service() {
@@ -27,6 +28,7 @@ class LocationForegroundService: Service() {
     private lateinit var locationCallback: LocationCallback
 
     private val locationFlow = MutableStateFlow<Location?>(null)
+    var locationData: StateFlow<Location?> = locationFlow
 
     companion object {
         private const val TAG = "LocationForegroundService"

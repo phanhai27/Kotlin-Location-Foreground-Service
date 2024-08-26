@@ -23,6 +23,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import cc.apollai.location_service.ui.ForegroundServiceScreen
 import cc.apollai.location_service.ui.theme.KotlinLocationForegroundServiceTheme
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
@@ -43,7 +45,7 @@ class MainActivity : ComponentActivity() {
             locationService = binder.getService()
             serviceState = true
 
-            startDataFlow()
+            observeDataFlow()
         }
 
         override fun onServiceDisconnected(arg0: ComponentName) {
@@ -54,9 +56,19 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun startDataFlow() {
+    private fun observeDataFlow() {
+        Log.d(TAG, "observe location updates from the service")
+
         lifecycleScope.launch {
-            Log.d(TAG, "This is the flow of location.")
+            lifecycleScope.launch {
+                locationService?.locationData?.map {
+                    it?.let { location ->
+                        "${location.latitude}, ${location.longitude}"
+                    }
+                }?.collectLatest {
+                    displayableLocation = it
+                }
+            }
         }
     }
 
